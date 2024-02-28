@@ -21,7 +21,7 @@ stages:
     steps:
     - task: AzureCLI@2
       inputs:
-        azureSubscription: 'New-Prod-ServiceConnection'
+        azureSubscription: 'Prod_Subscription'
         scriptType: 'bash'
         scriptLocation: 'inlineScript'
         inlineScript: |
@@ -38,7 +38,7 @@ stages:
         displayName: 'Deploy Bicep Files'
         inputs:
           deploymentScope: 'Resource Group'
-          azureResourceManagerConnection: 'New-Prod-ServiceConnection'
+          azureResourceManagerConnection: 'Prod_Subscription'
           subscriptionId: '39aca73e-1d25-4edf-84d5-ebe0397a816b'
           action: 'Create Or Update Resource Group'
           resourceGroupName: '$(RG)'
