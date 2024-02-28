@@ -103,6 +103,24 @@ output nsgId string = nsg.id
 resource nsgOther 'Microsoft.Network/networkSecurityGroups@2020-04-01' = {
   name: nsgNameOther
   location: location
+  properties:{
+    securityRules:[
+      {
+        name: 'Allow-Connection-To-ADB-FrontEnd'
+        properties: {
+          description: 'Required for users to connect to databricks using private endpoint.'
+          protocol: '*'
+          sourcePortRange: '*'
+          destinationPortRange: '*'
+          sourceAddressPrefix: '*'
+          destinationAddressPrefix: '192.168.2.0/24'
+          access: 'Allow'
+          priority: 100
+          direction: 'Inbound'
+        }
+      }
+    ]
+  }
 }
 
 output nsgOtherId string = nsgOther.id
