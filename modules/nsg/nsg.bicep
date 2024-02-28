@@ -2,7 +2,7 @@ param nsgName string
 
 param location string
 
-resource nsg 'Microsoft.Network/networkSecurityGroups@2021-05-01' = {
+resource nsg 'Microsoft.Network/networkSecurityGroups@2020-04-01' = {
   name: nsgName
   location: location
   properties: {
