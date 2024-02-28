@@ -5,13 +5,19 @@
 
 trigger: none
 
-pool:
-  vmImage: ubuntu-latest
+name: Deploy Bicep files
 
 variables:
-  RG: 'RG-Bicep-Adb'
-  templateFile: 'main.bicep'
-  templateParameterFile: 'main.parameters.json'
+  vmImageName: 'ubuntu-latest'
+
+  azureServiceConnection: 'Prod_Subscription'
+  location: 'australiaeast'
+  templateFile: '/main.bicep'
+  templateParameterFile: '/main.parameters.json'
+  resourceGroupName: 'RG-Bicep-Adb'
+
+pool:
+  vmImage: $(vmImageName)
 
 stages:  
 
@@ -21,14 +27,14 @@ stages:
     steps:
     - task: AzureCLI@2
       inputs:
-        azureSubscription: 'Prod_Subscription'
+        azureSubscription: '$(azureServiceConnection)'
         scriptType: 'bash'
         scriptLocation: 'inlineScript'
         inlineScript: |
           az deployment group what-if \
             --template-file $(Build.SourcesDirectory)/$(templateFile) \
             --parameters '$(Build.SourcesDirectory)/$(templateParameterFile)' \
-            --resource-group '$(RG)'
+            --resource-group '$(resourceGroupName)'
 
 - stage: Deploy
   jobs:
@@ -38,12 +44,10 @@ stages:
         displayName: 'Deploy Bicep Files'
         inputs:
           deploymentScope: 'Resource Group'
-          azureResourceManagerConnection: 'Prod_Subscription'
-          subscriptionId: '39aca73e-1d25-4edf-84d5-ebe0397a816b'
+          resourceGroupName: '$(resourceGroupName)'
+          azureResourceManagerConnection: '$(azureServiceConnection)'
           action: 'Create Or Update Resource Group'
-          resourceGroupName: '$(RG)'
-          location: 'Australia East'
-          templateLocation: 'Linked artifact'
-          csmFile: 'main.bicep'
-          csmParametersFile: 'main.parameters.json'
+          csmFile: '$(Build.SourcesDirectory)/$(templateFile)'
+          csmParametersFile: '$(Build.SourcesDirectory)/$(templateParameterFile)'
           deploymentMode: 'Incremental'
+          deploymentName: 'DeployPipelineTemplate'
