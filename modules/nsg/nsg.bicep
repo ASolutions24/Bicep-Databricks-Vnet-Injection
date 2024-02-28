@@ -1,5 +1,7 @@
 param nsgName string
 
+param nsgNameOther string
+
 param location string
 
 resource nsg 'Microsoft.Network/networkSecurityGroups@2020-04-01' = {
@@ -17,7 +19,7 @@ resource nsg 'Microsoft.Network/networkSecurityGroups@2020-04-01' = {
           sourceAddressPrefix: 'VirtualNetwork'
           destinationAddressPrefix: 'VirtualNetwork'
           access: 'Allow'
-          priority: 101
+          priority: 100
           direction: 'Inbound'
         }
       }
@@ -96,3 +98,13 @@ resource nsg 'Microsoft.Network/networkSecurityGroups@2020-04-01' = {
 }
 
 output nsgId string = nsg.id
+
+
+resource nsgOther 'Microsoft.Network/networkSecurityGroups@2020-04-01' = {
+  name: nsgNameOther
+  location: location
+}
+
+output nsgOtherId string = nsgOther.id
+
+
