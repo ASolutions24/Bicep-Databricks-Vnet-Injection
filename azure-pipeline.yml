@@ -21,7 +21,7 @@ stages:
     steps:
     - task: AzureCLI@2
       inputs:
-        azureSubscription: 'ASHubServiceConnection'
+        azureSubscription: 'New-Prod-ServiceConnection'
         scriptType: 'bash'
         scriptLocation: 'inlineScript'
         inlineScript: |
@@ -38,7 +38,7 @@ stages:
         displayName: 'Deploy Bicep Files'
         inputs:
           deploymentScope: 'Resource Group'
-          azureResourceManagerConnection: 'ASHubServiceConnection'
+          azureResourceManagerConnection: 'New-Prod-ServiceConnection'
           subscriptionId: '39aca73e-1d25-4edf-84d5-ebe0397a816b'
           action: 'Create Or Update Resource Group'
           resourceGroupName: '$(RG)'
@@ -47,16 +47,3 @@ stages:
           csmFile: 'main.bicep'
           csmParametersFile: 'main.parameters.json'
           deploymentMode: 'Incremental'
-
-- stage: Cleanup
-  dependsOn: Deploy
-  jobs:
-  - job: CleanUp
-    steps:
-      - task: AzureCLI@2
-        displayName: 'Cleanup Resources'
-        inputs:
-          azureSubscription: 'ASHubServiceConnection'
-          scriptType: 'bash'
-          scriptLocation: 'inlineScript'
-          inlineScript: 'az group delete --name $(RG) --yes'
