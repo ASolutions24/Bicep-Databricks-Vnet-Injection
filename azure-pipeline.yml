@@ -47,6 +47,7 @@ stages:
           resourceGroupName: '$(resourceGroupName)'
           azureResourceManagerConnection: '$(azureServiceConnection)'
           action: 'Create Or Update Resource Group'
+          location: '$(location)'
           csmFile: '$(Build.SourcesDirectory)/$(templateFile)'
           csmParametersFile: '$(Build.SourcesDirectory)/$(templateParameterFile)'
           deploymentMode: 'Incremental'
