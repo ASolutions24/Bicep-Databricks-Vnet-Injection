@@ -32,18 +32,17 @@
           "delServiceName": "Microsoft.Databricks/workspaces"
         },
         {
-          "subnetPrefix": "10.179.128.0/26",
-          "name": "storage-subnet",
-          "delegatoinName": "storage-del",
-          "delServiceName": "Microsoft.Web/serverFarms"
-        },
-        {
           "subnetPrefix": "10.179.129.0/26",
           "name": "pvtEP-subnet",
           "delegatoinName": "storage-del",
           "delServiceName": "Microsoft.Web/serverFarms"
+        },
+        {
+          "subnetPrefix": "10.179.128.0/26",
+          "name": "storage-subnet",
+          "delegatoinName": "storage-del",
+          "delServiceName": "Microsoft.Web/serverFarms"
         }
-
       ]
     },
     "nsgName": {
