@@ -1,0 +1,46 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "tags": {
+      "value": {
+        "Environment": "Lab",
+        "Department": "IT"
+      }
+    },
+    "vnetName": {
+      "value": "bicep-adb-vnet"
+    },
+    "addressPrefixes": {
+      "value": [
+        "10.179.0.0/16"
+      ]
+    },
+    "ipSubnets": {
+      "value": [
+        {
+          "subnetPrefix": "10.179.0.0/18",
+          "name": "private-subnet",
+          "delegatoinName": "databricks-del-private",
+          "delServiceName": "Microsoft.Databricks/workspaces"
+
+        },
+        {
+          "subnetPrefix": "10.179.64.0/18",
+          "name": "public-subnet",
+          "delegatoinName": "databricks-del-public",
+          "delServiceName": "Microsoft.Databricks/workspaces"
+        },
+        {
+          "subnetPrefix": "10.179.128.0/26",
+          "name": "storage-subnet",
+          "delegatoinName": "storage-del",
+          "delServiceName": "Microsoft.Web/serverFarms"
+        }
+      ]
+    },
+    "nsgName": {
+      "value": "databricks-nsg"
+    }
+  }
+}

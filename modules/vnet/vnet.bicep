@@ -1,47 +1,70 @@
-resource vnet 'Microsoft.Network/virtualNetworks@2022-09-01' = {
+// File to create a virtual network 
+
+param location string
+
+param tags object
+
+param vnetName string
+
+param addressPrefixes array
+
+param ipSubnets array
+
+param nsgId string
+
+
+resource vnet 'Microsoft.Network/virtualNetworks@2021-05-01' = {
   name: vnetName
   location: location
+  tags: tags
   properties: {
     addressSpace: {
-      addressPrefixes: [
-        vnetCidr
-      ]
+      addressPrefixes: addressPrefixes
     }
-    subnets: [
-      {
-        name: publicSubnetName
-        properties: {
-          addressPrefix: publicSubnetCidr
-          networkSecurityGroup: {
-            id: nsg.id
-          }
-          delegations: [
-            {
-              name: 'databricks-del-public'
-              properties: {
-                serviceName: 'Microsoft.Databricks/workspaces'
-              }
-            }
-          ]
+    subnets: [for ipSubnet in ipSubnets: {
+      name: ipSubnet.name
+      properties: {
+        addressPrefix: ipSubnet.subnetPrefix
+        networkSecurityGroup: {
+          id: nsgId
         }
-      }
-      {
-        name: privateSubnetName
-        properties: {
-          addressPrefix: privateSubnetCidr
-          networkSecurityGroup: {
-            id: nsg.id
-          }
-          delegations: [
-            {
-              name: 'databricks-del-private'
-              properties: {
-                serviceName: 'Microsoft.Databricks/workspaces'
-              }
+        delegations:[
+          {
+            name: ipSubnet.delegatoinName
+            properties:{
+              serviceName: ipSubnet.delServiceName
             }
-          ]
-        }
+          }
+        ]
       }
-    ]
+    }
+   ]
   }
 }
+output vnetId string = vnet.id
+
+
+
+
+
+
+/*
+    subnets: [for ipSubnet in ipSubnets: {
+      name: ipSubnet.name
+      properties: {
+        addressPrefix: ipSubnet.subnetPrefix
+        networkSecurityGroup: {
+          id: nsgId
+        }
+        delegations:[
+          {
+            name:'databricks-del-public'
+            properties:{
+              serviceName:'Microsoft.Databricks/workspaces'
+            }
+          }
+        ]
+      }
+    }
+   ]
+*/
